@@ -1,0 +1,3 @@
+steps:
+  - label: ":gradle:"
+    command: "./gradlew build"
