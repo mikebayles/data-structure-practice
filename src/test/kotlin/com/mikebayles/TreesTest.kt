@@ -184,4 +184,53 @@ class TreesTest {
         )
         assertFalse(head.isBst)
     }
+
+    @Test
+    fun `simple isBst test`() {
+        val head = BinaryNode(
+                data = 3,
+                left = BinaryNode(
+                        data = 2,
+                        left = BinaryNode(1)
+                )
+        )
+        assertTrue(head.isBst)
+    }
+
+    @Test
+    fun `simple ca test`() {
+        val node7 = BinaryNode(7)
+        val node6 = BinaryNode(6)
+        val node5 = BinaryNode(5)
+        val node2 = BinaryNode(data = 2,
+                left = node6,
+                right = node5)
+
+        val head = BinaryNode(
+                data = 3,
+                left = node2,
+                right = node7
+
+        )
+        assertEquals(head, BinaryNode.commonAncestor(head, node7, node5))
+    }
+
+    @Test
+    fun `simple subtree test`() {
+        val node7 = BinaryNode(7)
+        val node6 = BinaryNode(6)
+        val node5 = BinaryNode(5)
+        val node2 = BinaryNode(data = 2,
+                left = node6,
+                right = node5)
+
+        val head = BinaryNode(
+                data = 3,
+                left = node2,
+                right = node7
+
+        )
+        assertTrue(node2.isSubtreeOf(head))
+        assertFalse(node2.isSubtreeOf(BinaryNode(1)))
+    }
 }

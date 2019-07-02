@@ -1,5 +1,6 @@
 package com.mikebayles
 
+import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 
@@ -42,11 +43,11 @@ val BinaryNode<Int>?.isBst: Boolean
     get() {
         if (this == null) return true
         left?.let {
-            if (it.data > data) return false
+            if (it.max > data) return false
         }
 
         right?.let {
-            if (it.data < data) return false
+            if (it.min < data) return false
         }
 
         return left.isBst && right.isBst
@@ -56,6 +57,24 @@ data class BinaryNode<T>(
         override val data: T,
         val left: BinaryNode<T>? = null,
         val right: BinaryNode<T>? = null) : Node<T>() {
+
+    companion object {
+        fun <T> commonAncestor(root: BinaryNode<T>?, p: BinaryNode<T>?, q: BinaryNode<T>?): BinaryNode<T>? {
+            if (root == null) return null
+            if (root == p && root == q) return root
+
+            val x = commonAncestor(root.left, p, q)
+            if (x != null && x != p && x != q) return x
+
+            val y = commonAncestor(root.right, p, q)
+            if (y != null && y != p && y != q) return y
+
+            if (x != null && y != null) return root
+            else if (root == p || root == q) return root
+
+            return x ?: y
+        }
+    }
 
     override val children: List<Node<T>>
         get() {
@@ -127,16 +146,10 @@ data class BinaryNode<T>(
         return result
     }
 
-//    fun isBst(): Boolean {
-//
-//        left?.let {
-//            if (it.data > data) return false
-//        }
-//
-//        right?.let {
-//            if (it.data < data) return false
-//        }
-//
-//        return left.isBst && right.isBst
-//    }
+    fun isSubtreeOf(other: BinaryNode<T>): Boolean {
+        val myPreOrder = preOrderTraversal()
+        val theirs = other.preOrderTraversal()
+
+        return Collections.indexOfSubList(theirs, myPreOrder) != -1
+    }
 }
